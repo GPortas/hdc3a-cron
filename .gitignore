@@ -12,3 +12,5 @@
 *.log
 /logs/*
 !/logs/.keep
+
+node_modules

@@ -1,6 +1,17 @@
 const Cron = require("croner");
 const fs = require("fs");
 const {spawn} = require("child_process");
+const dotenv = require('dotenv');
+dotenv.config();
+
+// Set cron intervals
+second = process.env.SECOND
+minute = process.env.MINUTE
+hour = process.env.HOUR
+day = process.env.DAY
+month = process.env.MONTH
+day_of_week = process.env.DAY_OF_WEEK
+interval = `${second} ${minute} ${hour} ${day} ${month} ${day_of_week}`
 
 
 /*    ┌──────────────── (optional) second (0 - 59)
@@ -11,7 +22,7 @@ const {spawn} = require("child_process");
       │ │ │ │ │ ┌────── day of week (0 - 6, SUN-Mon)
       │ │ │ │ │ │       (0 to 6 are Sunday to Saturday; 7 is Sunday, the same as 0)
       │ │ │ │ │ │       */
-Cron("*/5 * * * * *", {}, ()=> {
+Cron(interval, {}, ()=> {
   console.log("checking for load report in dropbox");
 
   try {

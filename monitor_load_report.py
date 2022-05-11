@@ -20,10 +20,13 @@ logging.debug("Executing monitor_load_report.py")
 
 def check_dropbox():
     loadreport_files = []
-    dropbox_root_dir = os.environ.get('DROPBOX_ROOT')
-    logging.debug("Checking dropbox in " + dropbox_root_dir)
+    dropbox_root_dir = os.environ.get('DROPBOX_PATH')
+    dropbox_name = os.environ.get('DROPBOX_NAME')
+    loadreport_dir = os.path.join(dropbox_root_dir, "/lts_load_reports", dropbox_name, "/incoming")
+    # failed_batch_dir = os.path.join(dropbox_root_dir, dropbox_name, "/incoming")
+    logging.debug("Checking dropbox in " + loadreport_dir)
 
-    for root, dirs, files in os.walk(dropbox_root_dir):
+    for root, dirs, files in os.walk(loadreport_dir):
         for file in files:
             if file.startswith("LOADREPORT"):
                 loadreport_files.append(file.name)
@@ -34,12 +37,13 @@ def check_dropbox():
 def notify_dts(filename):
     dts_endpoint = os.environ.get('DTS_ENDPOINT')
     logging.debug("Calling DTS /loadreport for file: " + filename)
-    requests.get(dts_endpoint + '/loadreport?filename=' + filename)
+    # Commented out because endpoint doesn't exist yet
+    # requests.get(dts_endpoint + '/loadreport?filename=' + filename)
 
 
 def main():
     loadreport_list = check_dropbox()
-    logging.debug("Loadreport files returned: " + loadreport_list)
+    logging.debug("Loadreport files returned: " + str(loadreport_list))
     for loadreport in loadreport_list:
         notify_dts(loadreport)
 
