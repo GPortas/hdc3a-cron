@@ -15,14 +15,16 @@ logging.basicConfig(filename=logname_template.format(datetime.today().strftime("
                     format='%(asctime)-2s --%(filename)s-- %(levelname)-8s %(message)s', datefmt=DATEFORMAT,
                     level=logging.DEBUG)
 
+dts_endpoint = os.environ.get('DTS_ENDPOINT')
+dropbox_root_dir = os.environ.get('DROPBOX_PATH')
+dropbox_name = os.environ.get('DROPBOX_NAME')
+
 logging.debug("Executing monitor_load_report.py")
 
-def check_dropbox():
+def collect_loadreports():
     loadreport_files = []
-    dropbox_root_dir = os.environ.get('DROPBOX_PATH')
-    dropbox_name = os.environ.get('DROPBOX_NAME')
     loadreport_dir = dropbox_root_dir + "/lts_load_reports" + dropbox_name + "/incoming"
-    logging.debug("Checking dropbox in " + loadreport_dir)
+    logging.debug("Checking for load reports in dropbox loc: " + loadreport_dir)
 
     for root, dirs, files in os.walk(loadreport_dir):
         for name in files:
@@ -32,18 +34,43 @@ def check_dropbox():
     return loadreport_files
 
 
-def notify_dts(filename):
-    dts_endpoint = os.environ.get('DTS_ENDPOINT')
+def notify_dts_loadreports(filename):
     logging.debug("Calling DTS /loadreport for file: " + filename)
     # Commented out because endpoint doesn't exist yet
     # requests.get(dts_endpoint + '/loadreport?filename=' + filename)
 
 
+def collect_failed_batch():
+    failed_batch_files = []
+    failed_batch_dir = dropbox_root_dir + dropbox_name + "/incoming"
+    logging.debug("Checking failed batches in loc: " + failed_batch_dir)
+
+    for root, dirs, files in os.walk(failed_batch_dir):
+        for name in files:
+            if re.match(".xml.failed", name):
+                failed_batch_files.append(name)
+
+    return failed_batch_files
+
+
+def notify_dts_failed_batch(filename):
+    logging.debug("Calling DTS for filed batch: " + filename)
+    # Commented out because endpoint doesn't exist yet
+    # requests.get(dts_endpoint + '/loadreport?filename=' + filename)
+
+
 def main():
-    loadreport_list = check_dropbox()
-    logging.debug("Loadreport files returned: " + str(loadreport_list))
+    # Collect successful ingests
+    loadreport_list = collect_loadreports()
+    logging.debug("Load report files returned: " + str(loadreport_list))
     for loadreport in loadreport_list:
-        notify_dts(loadreport)
+        notify_dts_loadreports(loadreport)
+
+    # Collect failed ingests
+    failed_batch_list = collect_failed_batch()
+    logging.debug("Failed batch files returned: " + str(failed_batch_list))
+    for faild_batch in failed_batch_list:
+        notify_dts_failed_batch(faild_batch)
 
 
 try:
