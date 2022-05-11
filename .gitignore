@@ -13,4 +13,5 @@
 /logs/*
 !/logs/.keep
 
-node_modules
+node_modules/
+test/

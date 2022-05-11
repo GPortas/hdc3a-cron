@@ -6,6 +6,8 @@ services:
       context: "."
       dockerfile: "Dockerfile"
     env_file: .env
+    volumes:
+      - ./logs:/home/appuser/cron/logs
     networks:
       - drsts-net
 

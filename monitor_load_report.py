@@ -3,7 +3,7 @@
 import sys
 import traceback
 from datetime import datetime
-import logging
+import logging, re
 import os
 
 import requests
@@ -17,19 +17,17 @@ logging.basicConfig(filename=logname_template.format(datetime.today().strftime("
 
 logging.debug("Executing monitor_load_report.py")
 
-
 def check_dropbox():
     loadreport_files = []
     dropbox_root_dir = os.environ.get('DROPBOX_PATH')
     dropbox_name = os.environ.get('DROPBOX_NAME')
-    loadreport_dir = os.path.join(dropbox_root_dir, "/lts_load_reports", dropbox_name, "/incoming")
-    # failed_batch_dir = os.path.join(dropbox_root_dir, dropbox_name, "/incoming")
+    loadreport_dir = dropbox_root_dir + "/lts_load_reports" + dropbox_name + "/incoming"
     logging.debug("Checking dropbox in " + loadreport_dir)
 
     for root, dirs, files in os.walk(loadreport_dir):
-        for file in files:
-            if file.startswith("LOADREPORT"):
-                loadreport_files.append(file.name)
+        for name in files:
+            if re.match("LOADREPORT", name):
+                loadreport_files.append(name)
 
     return loadreport_files
 
