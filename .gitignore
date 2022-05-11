@@ -1,3 +1,14 @@
+# Editor configs
+*.editorconfig
+.project
+.pydevproject
+.vscode/
 .idea
+
+# Environment variables
 .env
-logs
+
+# Logs
+*.log
+/logs/*
+!/logs/.keep
