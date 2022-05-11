@@ -1,0 +1,5 @@
+# Environment 'development', 'test', or 'production'
+ENV=development
+
+DTS_ENDPOINT=https://ltsds-cloud-dev-1.lib.harvard.edu:10581
+DROPBOX_ROOT=
