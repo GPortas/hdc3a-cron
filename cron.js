@@ -26,7 +26,7 @@ Cron(interval, {}, ()=> {
   console.log("checking for load report in dropbox");
 
   try {
-    subprocess = spawn("/home/appuser/cron/monitor_load_report.py")
+    subprocess = spawn("/home/appuser/cron/monitor_dropbox.py")
     subprocess.stdout.on('data', (data) => { console.log(data.toString()) });
     subprocess.stderr.on('data', (data) => { console.log("ERR: " + data) });
   }

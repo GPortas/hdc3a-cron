@@ -8,6 +8,7 @@ services:
     env_file: .env
     volumes:
       - ./logs:/home/appuser/cron/logs
+      - ./tests/data/drs2dev/drsfs/dropbox:/home/appuser/dropbox
     networks:
       - drsts-net
 

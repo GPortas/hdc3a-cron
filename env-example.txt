@@ -20,5 +20,5 @@ DAY_OF_WEEK=*
 DTS_ENDPOINT=https://ltsds-cloud-dev-1.lib.harvard.edu:10581
 
 # Dropbox
-DROPBOX_PATH=/drs2dev/drsfs/dropbox
+DROPBOX_PATH=/home/appuser/dropbox
 DROPBOX_NAME=/dvndev

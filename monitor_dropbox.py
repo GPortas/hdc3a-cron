@@ -19,7 +19,7 @@ dts_endpoint = os.environ.get('DTS_ENDPOINT')
 dropbox_root_dir = os.environ.get('DROPBOX_PATH')
 dropbox_name = os.environ.get('DROPBOX_NAME')
 
-logging.debug("Executing monitor_load_report.py")
+logging.debug("Executing monitor_dropbox.py")
 
 def collect_loadreports():
     loadreport_files = []
@@ -48,7 +48,7 @@ def collect_failed_batch():
     for root, dirs, files in os.walk(failed_batch_dir):
         for name in files:
             if re.match("batch.xml.failed", name):
-                failed_batch_files.append(name)
+                failed_batch_files.append(root + "/" + name)
 
     return failed_batch_files
 
@@ -69,8 +69,8 @@ def main():
     # Collect failed ingests
     failed_batch_list = collect_failed_batch()
     logging.debug("Failed batch files returned: " + str(failed_batch_list))
-    for faild_batch in failed_batch_list:
-        notify_dts_failed_batch(faild_batch)
+    for failed_batch in failed_batch_list:
+        notify_dts_failed_batch(failed_batch)
 
 
 try:
