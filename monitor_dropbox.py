@@ -48,7 +48,8 @@ def collect_failed_batch():
     for root, dirs, files in os.walk(failed_batch_dir):
         for name in files:
             if re.match("batch.xml.failed", name):
-                failed_batch_files.append(root + "/" + name)
+                split_path = root.split("/")
+                failed_batch_files.append(split_path.pop())
 
     return failed_batch_files
 
